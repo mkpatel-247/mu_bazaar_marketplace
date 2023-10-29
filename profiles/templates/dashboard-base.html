@@ -1,0 +1,172 @@
+{% load static %} {% load custom_filters %}
+<div class="col-lg-4">
+  <div class="sidebar">
+    <!-- User Widget -->
+    <div class="widget user-dashboard-profile">
+      <!-- User Image -->
+      <div class="profile-thumb">
+        {% if data.user_image == '' %}
+        <img
+          src="{% static 'images/account/person-circle.svg' %}"
+          alt="Avatar"
+        />
+        {% else %}
+        <img src="{{data.user_image.url}}" alt="" class="rounded-circle" />
+        {% endif %}
+      </div>
+      <p>{{data.last_logout_time}}</p>
+      <!-- User Name -->
+      <h5 class="text-center">{{ data.get_full_name }}</h5>
+      <p>Joined {{data.date_joined.date}}</p>
+      {% if data.email_is_verified == False %}
+      <p>
+        Email Verify:<span class="badge border-danger border-1 text-danger">
+          Not Verified
+        </span>
+      </p>
+      {% endif %}
+      <a href="{% url 'profile' user.uid %}" class="btn btn-main-sm"
+        ><i class="bi bi-pencil"></i> Edit Profile</a
+      >
+    </div>
+    <!-- Dashboard Links -->
+    <div class="widget user-dashboard-menu">
+      <ul>
+        {% if request.path|starts_with:'/dashboard/' %}
+        <li class="active">{% else %}</li>
+        <li>
+          {% endif %}
+          <a href="{% url 'dashboard' user.uid %}"
+            ><i class="fa fa-user"></i> My Ads</a
+          >
+        </li>
+        {% if request.path|starts_with:'/wishlist/' %}
+        <li class="active">{% else %}</li>
+
+        <li>
+          {% endif %}
+          <a href="{% url 'wishlist' %}"
+            ><i class="fa fa-bookmark-o"></i> Wishlist <span>5</span></a
+          >
+        </li>
+        {% if request.path|starts_with:'/inbox/' %}
+        <li class="active">{% else %}</li>
+        <li>
+          {% endif %}
+          <a href="{% url 'inbox' %}"
+            ><i class="fa fa-bolt"></i> Messages<span>23</span></a
+          >
+        </li>
+        <li>
+          <a href="#!" data-toggle="modal" data-target="#logout"
+            ><i class="bi bi-box-arrow-left"></i>Logout</a
+          >
+        </li>
+        <li>
+          <a
+            href="#!"
+            data-toggle="modal"
+            data-target="#deleteaccount"
+            style="color: red"
+            ><i class="bi bi-x-octagon"></i>Disable Account</a
+          >
+        </li>
+      </ul>
+    </div>
+
+    <div
+      class="modal fade"
+      id="logout"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalCenterTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header border-bottom-0">
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body text-center">
+            <img
+              src="{% static 'images/account/Account1.png' %}"
+              class="img-fluid mb-2"
+              alt=""
+            />
+            <h6 class="py-2">Are you sure you want to logout ?</h6>
+          </div>
+          <div
+            class="modal-footer border-top-0 mb-3 mx-5 justify-content-center"
+          >
+            <button type="button" class="btn btn-primary" data-dismiss="modal">
+              Cancel
+            </button>
+            <a type="button" href="/sign_out" class="btn btn-danger">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="deleteaccount"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalCenterTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header border-bottom-0">
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body text-center">
+            <img
+              src="{% static 'images/account/Account1.png' %}"
+              class="img-fluid mb-2"
+              alt=""
+            />
+            <h6 class="py-2">Are you sure you want to delete your account?</h6>
+            <p>
+              Do you really want to delete these records? This process cannot be
+              undone.
+            </p>
+            <textarea
+              class="form-control"
+              name="message"
+              id=""
+              cols="40"
+              rows="4"
+              class="w-100 rounded"
+            ></textarea>
+          </div>
+          <div
+            class="modal-footer border-top-0 mb-3 mx-5 justify-content-center"
+          >
+            <button type="button" class="btn btn-primary" data-dismiss="modal">
+              Cancel
+            </button>
+            <button type="button" class="btn btn-danger">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% comment %} {% block dashboard_base %} {% endblock dashboard_base %} {%
+endblock body %} {% endcomment %}

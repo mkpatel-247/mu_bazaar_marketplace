@@ -1,0 +1,370 @@
+{% extends 'base.html'%} {% block title %} Dashboard | {% endblock title %}
+{% block body %} {% load static %}
+  <!-- Container Start -->
+  <div class="container">
+    <!-- Row Start -->
+    <div class="row">
+      {% include 'dashboard-base.html' %} {% comment %} {% block sidebar %} {%
+      comment %}
+      <p></p>
+      {% endblock sidebar%} {% endcomment %}
+      <div class="col-lg-8">
+        <!-- Recently Favorited -->
+        <div class="widget dashboard-container my-adslist">
+          <h3 class="widget-header">My Ads</h3>
+          <table class="table table-responsive product-dashboard-table">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Product Title</th>
+                <th class="text-center">Category</th>
+                <th class="text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for ads in listing %}
+              <tr>
+                <td class="product-thumb">
+                  <img
+                    width="80px"
+                    height="auto"
+                    src="{{ads.first_ads_images.url}}"
+                    alt="image description"
+                  />
+                </td>
+                <td class="product-details">
+                  <h3 class="title">{{ads.ads_title}}</h3>
+                  <span class="add-id"
+                    ><strong>Ad ID:</strong> {{ads.ads_id}}</span
+                  >
+                  <span
+                    ><strong>Posted on: </strong
+                    ><time>{{ads.listed_date}}</time>
+                  </span>
+                  {% if ads.is_published == True %}
+                  <span class="status active"
+                    ><strong>Status</strong>Active</span
+                  >
+                  {% else %}
+                  <span class="status" style="color: #fe0911"
+                    ><strong>Status</strong>Disable</span
+                  >
+                  {% endif %}
+                  <span class="location"
+                    ><strong>Location</strong>{{ads.location}}</span
+                  >
+                </td>
+                <td class="product-category">
+                  <span class="categories">{{ads.category_id}}</span>
+                </td>
+                <td class="action" data-title="Action">
+                  <div class="">
+                    <ul class="list-inline justify-content-center">
+                      <li class="list-inline-item">
+                        <a
+                          data-toggle="tooltip"
+                          data-placement="top"
+                          title="view"
+                          class="view"
+                          href="{% url 'single_ads' ads.ads_id %}"
+                        >
+                          <i class="fa fa-eye"></i>
+                        </a>
+                      </li>
+                      <li class="list-inline-item">
+                        <a
+                          class="edit"
+                          data-toggle="modal"
+                          data-target="#edit{{ads.ads_id}}"
+                          data-placement="top"
+                          title="Edit"
+                          href="#"
+                        >
+                          <i class="fa fa-pencil"></i>
+                        </a>
+                      </li>
+                      <li class="list-inline-item">
+                        <a
+                          class="delete"
+                          data-toggle="modal"
+                          data-target="#delete{{ads.ads_id}}"
+                          data-placement="top"
+                          title="Delete"
+                          href="#!"
+                        >
+                          <i class="fa fa-trash"></i>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Edit modal -->
+              <div
+                class="modal fade"
+                id="edit{{ads.ads_id}}"
+                tabindex="-1"
+                role="dialog"
+                aria-labelledby="exampleModalCenterTitle"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog-centered" role="document">
+                  <div class="container">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h3>Edit Your ad</h3>
+                      <button
+                      type="button"
+                      class="close"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                      >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="container">
+                    <form action="{% url 'update_listing' ads.owner.uid ads.ads_id %}" method="post">
+                      {% csrf_token %}
+                      <div class="modal-body">
+                        <div class="row">
+                          <div class="col-lg-6">
+                            <h6 class="font-weight-bold pb-1">Title Of Ad:</h6>
+                            <input
+                              type="text"
+                              class="form-control bg-white"
+                              placeholder="Ad title go There"
+                              name="ads_title"
+                              value="{{ads.ads_title}}"
+                              required
+                            />
+                            <h6 class="font-weight-bold pt-2 pb-2">Ad for :</h6>
+                            <div class="row px-3">
+                              <div class="col-lg-3 mr-lg-2 my-2 pb-1 rounded bg-white">
+                                <input
+                                  type="radio"
+                                  name="gender"
+                                  value="M"
+                                  id="male"
+                                  {% if ads.adsForWhichGender == 'M' %}
+                                  checked
+                                  {% endif %}
+                                  required
+                                />
+                                <label for="male" class="py-2">Male</label>
+                              </div>
+                              <div class="col-lg-3 mr-lg-2 my-2 pb-1 rounded bg-white">
+                                <input
+                                  type="radio"
+                                  name="gender"
+                                  value="F"
+                                  id="female"
+                                  {% if ads.adsForWhichGender == 'F' %}
+                                  checked
+                                  {% endif %}
+                                  required
+                                />
+                                <label for="female" class="py-2">Female</label>
+                              </div>
+                              <div class="col-lg-3 mr-lg-2 my-2 pb-1 rounded bg-white">
+                                <input
+                                  type="radio"
+                                  name="gender"
+                                  value="A"
+                                  id="none"
+                                  {% if ads.adsForWhichGender == 'A' %}
+                                  checked
+                                  {% endif %}
+                                  required
+                                />
+                                <label for="none" class="py-2">All User</label>
+                              </div>
+                            </div>
+                            <h6 class="font-weight-bold pb-1">Description:</h6>
+                            <textarea
+                              name="ads-description"
+                              class="form-control bg-white"
+                              rows="5"
+                              required
+                            >{{ads.ads_description}}</textarea>
+                            
+                            <label class="font-weight-bold pb-1">Ad is: </label>
+                            <select name="published" class="form-control bg-white pt-2" id="inputGroupSelect" >
+                              <option value="Yes" {% if ads.is_published %} selected="" {% endif %}>
+                                Active
+                              </option>
+                              <option value="No" {% if ads.is_published == False %} selected="" {% endif %}>
+                                Disable
+                              </option>
+                            </select>                            
+                          </div>
+                          <div class="col-lg-6">
+                            <h6 class="font-weight-bold pb-1">
+                              Select Ad Category:
+                            </h6>
+                            <select name="adscategory" class="form-control w-100 bg-white" id="inputGroupSelect" >
+                              <option>Select category</option>
+                              {% for i in cat %}
+                              <span></span>
+                              {% if i.cat_uid == ads.category_id.cat_uid %}
+                              <option value="{{ads.category_id.cat_uid}}" selected="">
+                                {{i.category_name}}
+                              </option>
+                              {% else %}
+                              <option value="{{i.cat_uid}}">
+                                {{i.category_name}}
+                              </option>
+                              {% endif %} {% endfor %}
+                            </select>
+                            <div class="price">
+                              <h6 class="font-weight-bold pt-2 pb-2">
+                                Item Price (&#8377; INR):
+                              </h6>
+                              <div class="row px-3">
+                                <div class="col-lg-4 rounded my-2 px-0">
+                                  <input
+                                    type="text"
+                                    name="price"
+                                    class="form-control bg-white"
+                                    placeholder="Price"
+                                    value="{{ads.price}}"
+                                    id="price"
+                                  />
+                                </div>
+                                <div class="col-lg-4 ml-lg-4 my-2 pb-1 rounded bg-white">
+                                  <input
+                                  type="checkbox"
+                                  name="is_negotiable"
+                                  id="Negotiable"                                 
+                                  {% if ads.negotiable %}
+                                    checked
+                                    {% endif %}
+                                  />
+                                  <label for="Negotiable" class="py-2"> Negotiable </label>
+
+                                  {% comment %}  {% endcomment %}
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div class="row px-3">
+                                <h6 class="font-weight-bold pb-1">Main Image</h6>
+                                <input
+                                  type="file"
+                                  class="form-control-file"
+                                  id="file-upload"
+                                  name="mainImage"
+                                  accept="image/*"
+                                />
+                                
+                                <h6 class="font-weight-bold pt-2">Images</h6>
+                                <input
+                                  type="file"
+                                  class="form-control-file"
+                                  id="file-upload"
+                                  name="images"
+                                  accept="image/*"
+                                  multiple
+                                />
+                              <h6 class="font-weight-bold pt-2 pb-1">
+                                Contact Address:
+                              </h6>
+
+                              <select name="ads_location" class="form-control w-100 bg-white" id="inputGroupSelect" >
+                                <option>Select Location</option>
+                                {% for data in city %}
+                                  {% if data.0 == ads.location %}
+                                    <option value="{{data.0}}" selected="">
+                                  {% else %}
+                                    <option value="{{data.0}}">
+                                  {% endif %}
+                                    {{data.0}}</option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        </div>
+                      </div>
+                      <div
+                        class="modal-footer border-top-0 mb-3 mx-5 justify-content-center"
+                      >
+                        <button
+                          type="button"
+                          class="btn btn-danger"
+                          data-dismiss="modal"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          class="btn btn-primary"
+                          > Save </button>
+                      </div>                      
+                      </form>
+                  </div>
+                </div>
+              </div>
+              <!-- Delete Modal -->
+              <div
+                class="modal fade"
+                id="delete{{ads.ads_id}}"
+                tabindex="-1"
+                role="dialog"
+                aria-labelledby="exampleModalCenterTitle"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header border-bottom-0">
+                      <button
+                        type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        aria-label="Close"
+                      >
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body text-center">
+                      <img
+                        src="{% static 'images/account/Account1.png' %}"
+                        class="img-fluid mb-2"
+                        alt=""
+                      />
+                      <h6 class="py-2">
+                        Are you sure you want to delete {{ads.ads_title}}
+                        listing ?
+                      </h6>
+                    </div>
+                    <div
+                      class="modal-footer border-top-0 mb-3 mx-5 justify-content-center"
+                    >
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        data-dismiss="modal"
+                      >
+                        Cancel
+                      </button>
+                      <a
+                        type="button"
+                        href="{% url 'delete_listing' ads.owner.uid ads.ads_id %}"
+                        class="btn btn-danger"
+                        >Delete Listing</a
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!-- Row End -->
+  </div>
+  <!-- Container End -->
+{% comment %} </section> {% endcomment %}
+{% endblock body %}

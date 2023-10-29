@@ -1,0 +1,63 @@
+{% extends 'base.html' %} {% block title %} Message | {% endblock title %}
+<hr />
+{% block body %}{% load static %}
+<div class="container">
+  <div class="row">
+    {% include 'dashboard-base.html' %}
+    <div class="col-lg-8">
+      {% comment %} {% include 'dashboard-base.html' %} {% endcomment %}
+      <div class="widget dashboard-container my-adslist">
+        <h3 class="widget-header">Message</h3>
+          {% if wishlist_items %}
+          <table class="table table-responsive product-dashboard-table">
+            <thead>
+              <tr>
+                <th>Ad title</th>
+                <th>Chat Info</th>
+                <th class="text-center">Action</th>
+              </tr>
+            </thead>
+            {% for item in wishlist_items %}
+            <tbody>
+              <tr>
+                <td class="product-thumb">
+                  <h3 class="title px-3">{{item.ads_id.ads_title}}</h3>
+                </td>
+                <td class="product-details">
+                  <span class="add-id">
+                    <strong>Owner: </strong>{{item.ads_id.owner.get_full_name}} </span>
+                  <span><strong>Last Seen: </strong>{{item.ads_id.listed_date}}
+                  </span>
+                </td>
+                
+                <td class="action" data-title="Action">
+                  {% comment %} <div class=""> {% endcomment %}
+                    <ul class="list-inline justify-content-center">
+                      <li class="list-inline-item">
+                        <a data-toggle="tooltip" data-placement="top" title="View" class="view" href="{% url 'single_ads' item.ads_id.ads_id %}">
+                          <i class="fa fa-eye"></i>
+                        </a>
+                      </li>
+                    <li class="list-inline-item">
+                      <a data-toggle="tooltip" data-placement="top" title="Chat" class="edit" href="">
+                        <i class="bi bi-chat-dots"></i>
+                      </a>
+                    </li>
+                  </ul>
+                  {% comment %} </div> {% endcomment %}
+                </td>
+              </tr>
+            </tbody>
+            {% endfor %}
+          {% else %}
+            <h4 class="text-center">No Messages</h4>
+          </table>
+        {% endif %}
+      </div>
+    </div>
+    
+    {% endblock body %}
+  </div>
+  </div>
+</div>
+</div>

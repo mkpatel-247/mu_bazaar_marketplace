@@ -1,0 +1,209 @@
+{% extends 'base.html' %} {% block title %} Ads Listing | {% endblock title %}
+<hr />
+{% block body %}
+<section class="advt-post bg-gray py-5">
+  <div class="container">
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <!-- Post Your ad start -->
+      <fieldset class="border border-gary px-3 px-md-4 py-4 mb-5">
+        <div class="row">
+          <div class="col-lg-12">
+            <h3>Post Your ad</h3>
+          </div>
+          <div class="col-lg-6">
+            <h6 class="font-weight-bold pt-4 pb-1">Title Of Ad:</h6>
+            <input
+              type="text"
+              class="form-control bg-white"
+              placeholder="Ad title go There"
+              name="ads_title"
+              required
+            />
+            <h6 class="font-weight-bold pt-4 pb-1">Ad for :</h6>
+            <div class="row px-3">
+              <div class="col-lg-3 mr-lg-2 my-2 pt-2 pb-1 rounded bg-white">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="M"
+                  id="male"
+                  required
+                />
+                <label for="male" class="py-2">Male</label>
+              </div>
+              <div class="col-lg-3 mr-lg-2 my-2 pt-2 pb-1 rounded bg-white">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="F"
+                  id="female"
+                  required
+                />
+                <label for="female" class="py-2">Female</label>
+              </div>
+              <div class="col-lg-3 mr-lg-2 my-2 pt-2 pb-1 rounded bg-white">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="A"
+                  id="none"
+                  required
+                />
+                <label for="none" class="py-2">All User</label>
+              </div>
+            </div>
+            <h6 class="font-weight-bold pt-4 pb-1">Description:</h6>
+            <textarea
+              name="ads-description"
+              id=""
+              class="form-control bg-white"
+              rows="7"
+              placeholder="Write details about your product"
+              required
+            ></textarea>
+          </div>
+          <div class="col-lg-6">
+            <h6 class="font-weight-bold pt-4 pb-1">Select Ad Category:</h6>
+            <select
+              name="adscategory"
+              class="form-control w-100 bg-white"
+              id="inputGroupSelect"
+            >
+              <option value="">Select category</option>
+              {% for data in cat %}
+              <option value="{{data.cat_uid}}">{{data.category_name}}</option>
+              {% endfor %}
+            </select>
+            <div class="price">
+              <h6 class="font-weight-bold pt-4 pb-1">
+                Item Price (&#8377; INR):
+              </h6>
+              <div class="row px-3">
+                <div class="col-lg-4 rounded my-2 px-0">
+                  <input
+                    type="text"
+                    name="price"
+                    class="form-control bg-white"
+                    placeholder="Price"
+                    id="price"
+                  />
+                </div>
+                <div class="col-lg-4 ml-lg-4 my-2 pt-2 pb-1 rounded bg-white">
+                  <input
+                    type="checkbox"
+                    name="is_negotiable"
+                    value="True"
+                    id="Negotiable"
+                  />
+                  <label for="Negotiable" class="py-2">Negotiable</label>
+                </div>
+              </div>
+            </div>
+            <div class="py-4">
+              <h6 class="font-weight-bold pb-1">Main Images</h6>
+              <input
+                type="file"
+                class="form-control-file"
+                id="file-upload"
+                name="mainImagesFile"
+                accept="image/*"
+                required
+              />
+              <h6 class="font-weight-bold mt-4 pb-1">Upload Images</h6>
+              <input
+                type="file"
+                class="form-control-file"
+                id="file-upload"
+                name="imagesFile"
+                accept="image/*"
+                multiple
+              />
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      <!-- Post Your ad end -->
+
+      <!-- seller-information start -->
+      <fieldset
+        class="border px-3 px-md-4 py-4 my-5 seller-information bg-gray"
+      >
+        <div class="row">
+          <div class="col-lg-12">
+            <h3>Seller Information</h3>
+          </div>
+          <div class="col-lg-6">
+            <h6 class="font-weight-bold pt-4 pb-1">Contact Name:</h6>
+            <input
+              type="text"
+              placeholder="Contact name"
+              class="form-control bg-white"
+              value="{{userData.get_full_name}}"
+              required
+              disabled
+            />
+            <h6 class="font-weight-bold pt-4 pb-1">Contact Email:</h6>
+            <input
+              type="text"
+              placeholder="Contact Number"
+              class="form-control bg-white"
+              value="{{userData.email}}"
+              required
+              disabled
+            />
+          </div>
+          <div class="col-lg-6">
+            <h6 class="font-weight-bold pt-4 pb-1">Contact Number:</h6>
+            <input
+              type="number"
+              placeholder="name@yourmail.com"
+              class="form-control bg-white"
+              value="{{userData.mobile}}"
+              required
+              disabled
+            />
+            <h6 class="font-weight-bold pt-4 pb-1">Contact Address:</h6>
+            <select
+              name="ads_location"
+              class="form-control w-100 bg-white"
+              id="inputGroupSelect"
+            >
+              <option value="">Select Location</option>
+              {% for data in city %}
+              <option value="{{data.0}}">{{data.0}}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      </fieldset>
+      <!-- seller-information end-->
+      <!-- submit button -->
+      <div class="checkbox d-inline-flex">
+        <input type="checkbox" id="terms-&-condition" class="mt-1" />
+        <label for="terms-&-condition" class="ml-2"
+          >By click you must agree with our
+          <span>
+            <a class="text-success" href="terms-condition.html"
+              >Terms & Condition and Posting Rules.</a
+            ></span
+          >
+        </label>
+      </div>
+      <button type="submit" class="btn btn-primary d-block mt-2">
+        Post Your Ad
+      </button>
+    </form>
+  </div>
+</section>
+{% endblock body %} {% block script %} function fileValidation() { var fileInput
+= document.getElementById('file'); var filePath = fileInput.value; // Allowing
+file type var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i; if
+(!allowedExtensions.exec(filePath)) { alert('Invalid file type');
+fileInput.value = ''; return false; } else { // Image preview if
+(fileInput.files && fileInput.files[0]) { var reader = new FileReader();
+reader.onload = function(e) { document.getElementById( 'imagePreview').innerHTML
+= '<img
+  src="' + e.target.result
+                  + '"
+/>'; }; reader.readAsDataURL(fileInput.files[0]); } } } {% endblock script %}

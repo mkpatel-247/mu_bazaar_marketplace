@@ -1,0 +1,114 @@
+{% extends 'base.html' %} {% block title %} Sign Up | {% endblock title %}
+<hr />
+{% block body %}
+
+<section class="login py-5 border-top-1">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-5 col-md-8 align-item-center">
+        <div class="border border">
+          <h3 class="bg-gray p-4">Register Now</h3>
+          <form method="post">
+            {% csrf_token %}
+            <fieldset class="p-4">
+              <input
+                class="form-control mb-3"
+                type="text"
+                placeholder="First Name*"
+                name="fname"
+                required
+              /><input
+                class="form-control mb-3"
+                type="text"
+                placeholder="Last Name*"
+                name="lname"
+                required
+              />
+              <input
+                class="form-control mb-3"
+                type="email"
+                placeholder="Email*"
+                name="email"
+                required
+              />
+              <input
+                class="form-control mb-3"
+                type="email"
+                placeholder="College Email ID*"
+                name="clg_email"
+                required
+              />
+              <input
+                class="form-control mb-3"
+                type="password"
+                placeholder="Password*"
+                name="password"
+                required
+              />
+              <input
+                class="form-control mb-3"
+                type="number"
+                placeholder="Mobile Number*"
+                name="ph_number"
+                required
+              />
+              <h6 class="font-weight-bold">Gender:</h6>
+              <div class="row px-3">
+                <div class="col-lg-3 mr-lg-2 my-2 pb-1 rounded bg-white">
+                  <input
+                    type="radio"
+                    name="gender"
+                    value="M"
+                    id="male"
+                    required
+                  />
+                  <label for="male" class="py-2">Male</label>
+                </div>
+                <div class="col-lg-3 mr-lg-2 my-2 pb-1 rounded bg-white">
+                  <input
+                    type="radio"
+                    name="gender"
+                    value="F"
+                    id="female"
+                    required
+                  />
+                  <label for="female" class="py-2">Female</label>
+                </div>
+                <div class="col-lg-3 mr-lg-2 my-2 pb-1 rounded bg-white">
+                  <input
+                    type="radio"
+                    name="gender"
+                    value="A"
+                    id="none"
+                    required
+                  />
+                  <label for="none" class="py-2">All User</label>
+                </div>
+              </div>
+              <div class="loggedin-forgot d-inline-flex my-3">
+                <input type="checkbox" id="registering" class="mt-1" required />
+                <label for="registering" class="px-2">
+                  By registering, you accept our
+                  <a
+                    class="text-primary font-weight-bold"
+                    href="terms-condition.html"
+                  >
+                    Terms & Conditions
+                  </a>
+                </label>
+              </div>
+              <button
+                type="submit"
+                class="btn btn-primary font-weight-bold mt-3"
+              >
+                Register Now
+              </button>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock body %}

@@ -1,0 +1,229 @@
+{% extends 'base.html' %} {% block title %} {{ details.ads_title }} |
+ {%endblock title %}
+<hr />
+{% block body %} {% load static %} {% include 'search-bar.html' %}
+<!--===================================
+=            Store Section            =
+====================================-->
+<section class="section bg-gray">
+  <!-- Container Start -->
+  <div class="container">
+    <div class="row">
+      <!-- Left sidebar -->
+      <div class="col-lg-8">
+        <div class="product-details">
+          <h1 class="product-title">{{details.ads_title}}</h1>
+          <div class="product-meta">
+            <ul class="list-inline">
+              <li class="list-inline-item">
+                <i class="fa fa-user-o"></i> By
+                <a href="user-profile.html">{{details.owner.get_full_name}}</a>
+              </li>
+              <li class="list-inline-item">
+                <i class="fa fa-folder-open-o"></i> Category<a
+                  href="category.html"
+                  >{{details.category_id}}</a
+                >
+              </li>
+              <li class="list-inline-item">
+                <i class="fa fa-location-arrow"></i> Location<a
+                  href="category.html"
+                  >{{details.location}}</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- product slider -->
+          <div class="product-slider">
+              {% if OnlyOneImage != True %}
+                {% for photos in image %}
+                <div
+                    class="product-slider-item my-8"
+                    data-image="{{photos.ads_photos.url}}"      
+                  >
+                  <img
+                    class="d-block img-fluid w-100"
+                    src="{{photos.ads_photos.url}}"
+                    alt="product-img"
+                  />
+                </div>
+                {%endfor%}
+              {% else %}
+                <div class="container">
+                  <img
+                    class="d-block img-fluid w-100"
+                    src="{{details.first_ads_images.url}}"
+                  />
+                </div>
+              {% endif %}
+          </div>
+          <!-- product slider -->
+
+          <div class="content mt-5 pt-5">
+            <div class="tab-content" id="pills-tabContent">
+              <div
+                class="tab-pane fade show active"
+                id="pills-home"
+                role="tabpanel"
+                aria-labelledby="pills-home-tab"
+              >
+                <h3 class="tab-title">Product Description</h3>
+                <p>{{details.ads_description}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="sidebar">
+          <div class="widget price text-center">
+            <h4>Price</h4>
+            <p>&#8377; {{details.price}}</p>
+          </div>
+          <!-- User Profile widget -->
+          <div class="widget user text-center">
+            
+            <h3>Posted by :</h3>
+            <h5>
+              <a href="user-profile.html">{{details.owner.get_full_name}}</a>
+            </h5>
+            <p class="member-time">
+              Member Since {{details.owner.date_joined.date}}
+            </p>
+            <a href="single.html">See all ads</a>
+            <ul class="list-inline mt-20">
+              <li class="list-inline-item">
+                {% if details.owner.uid != user.uid %}
+                  <button
+                    class="btn btn-contact d-inline-block btn-primary px-lg-5 my-1 px-md-3"
+                    data-toggle="modal" data-target="#contact{{details.ads_id}}" title="Contact Seller" href="#!" >Contact</button>
+                {% else %}
+                  <button
+                  class="btn btn-contact d-inline-block btn-primary px-lg-5 my-1 px-md-3"
+                  title = "This is your listing. So you can't contact" disabled>Contact</button>
+                {% endif %}
+                <form method="post" action="{% url 'wishlist_operation' details.ads_id %}" >
+                  {% csrf_token %}
+                  {% if isWishlist_exist %}
+                    <button type="submit" class="btn btn-offer d-inline-block btn-primary ml-n1  my-1 px-lg-4 px-md-3">
+                      <input type="hidden" name="symbol" value="REMOVED">
+                      <i class="bi bi-bookmark-fill"></i> Added
+                    </button>
+                  {% else %}
+                    <button type="submit" class="btn btn-offer d-inline-block btn-primary ml-n1  my-1 px-lg-4 px-md-3">
+                      <input type="hidden" name="symbol" value="ADDED">
+                      <i class="bi bi-bookmark"></i> Add to Wishlist
+                    </button>
+                  {% endif %}
+                </form>
+              </li>
+            </ul>
+          </div>
+          <!-- Map Widget -->
+          <table class="table table-bordered product-table">
+            <tr>
+              <th colspan="2" class="text-center">Product Specifications</th>
+            </tr>
+            <tbody>
+              <tr>
+                <td>Seller Price</td>
+                <td>&#8377; {{details.price}}</td>
+              </tr>
+              <tr>
+                <td>Listed Date</td>
+                <td>{{details.listed_date}}</td>
+              </tr>
+              <tr>
+                <td>Negotiable</td>
+                {% if details.negotiable %}
+                  <td>Yes</td>
+                {% else %}
+                  <td>No</td>
+                {% endif %}
+              </tr>
+              <tr>
+                <td>Suitable: </td>
+                {% if details.adsForWhichGender == "M" %}
+                  <td>Male</td>
+                {% elif details.adsForWhichGender == "F" %}
+                  <td>Female</td>
+                {% else %}
+                  <td>All</td>
+                {% endif %}
+              </tr>
+              <tr>
+                <td>Location</td>
+                <td>{{details.location}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- Coupon Widget -->
+          <div class="widget coupon text-center">
+            <!-- Coupon description -->
+            <p>
+              Have a great product to post ? Share it with your fellow users.
+            </p>
+            <!-- Submii button -->
+            <a
+              href="{% url 'new_ad_listing' user.uid %}"
+              class="btn btn-transparent-white"
+              >Submit Listing</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <!--Contact Modal-->
+      <div class="modal fade" id="contact{{details.ads_id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+              <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form action="#">
+              <div class="modal-body text-center">
+                {% comment %} <h4>Inquiry for {{details.ads_title}}</h4> {% endcomment %}
+                <h3>Contact Details</h3>
+                <hr/>
+                <ul class="text-center">
+                  <li>
+                    <h6>Owner : {{details.owner.get_full_name}}</h6>
+                  </li>
+                  <li>
+                    <h6>Owner Mobile No. : {{details.owner.mobile}}</h6>
+                  </li><li>
+                    <h6>Owner Email Address: {{details.owner.email}}</h6>
+                  </li>
+                </ul>
+                {% comment %} <div class="form-group mb-30">
+                  <label for="message">Message</label>
+                  <textarea class="form-control" id="message" rows="8" required></textarea>
+                </div>
+                
+                <div class="modal-footer border-top-0 mb-3 mx-5 justify-content-center" >
+                  <button type="button" class="btn btn-danger" data-dismiss="modal"> Cancel </button>
+                  <a type="button" href="" class="btn btn-primary">Send</a>
+                </div> {% endcomment %}
+              </div>
+            </form>
+          </div>
+        </div>
+              {% comment %} 
+              <div class="block comment">
+                  <!-- Message -->
+                  
+              </div>
+              {% endcomment %}
+      </div>
+  </div>
+  <!-- Container End -->
+</section>
+{% endblock body %}

@@ -1,0 +1,95 @@
+{% extends 'base.html' %} {% block title %} Wishlist | {% endblock title %}
+<hr />
+{% block body %}{% load static %}
+<div class="container">
+  <div class="row">
+    {% include 'dashboard-base.html' %} {% comment %} {% block sidebar %} {%
+    comment %}
+    <p></p>
+    {% endblock sidebar%} {% endcomment %}
+    <div class="col-lg-8">
+      {% comment %} {% include 'dashboard-base.html' %} {% endcomment %}
+      <div class="widget dashboard-container my-adslist">
+        <h3 class="widget-header">Favourite Ads</h3>
+          {% if wishlist_items %}
+          <table class="table table-responsive product-dashboard-table">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Product Title</th>
+                <th class="text-center">Category</th>
+                <th class="text-center">Action</th>
+              </tr>
+            </thead>
+            <h3>{{wishlist_items.ads_id.first_ads_images}}</h3>
+            {% for item in wishlist_items %}
+            <tbody>
+              <tr>
+                <td class="product-thumb">
+                  <img
+                  width="80px"
+                  height="auto"
+                  src="{{item.ads_id.first_ads_images.url}}"
+                  alt="image description"
+                  />
+                </td>
+                <td class="product-details">
+                  <h3 class="title">{{item.ads_id.ads_title}}</h3>
+                  <span class="add-id"
+                  ><strong>Ad ID:</strong> {{item.ads_id.ads_id}}</span
+                  >
+                  <span
+                  ><strong>Posted on: </strong><time>{{item.ads_id.listed_date}}</time>
+                  </span>
+                  <span class="location"
+                  ><strong>Location</strong>{{item.ads_id.location}}</span
+                  >
+                </td>
+                <td class="product-category">
+                  <span class="categories">{{item.ads_id.category_id}}</span>
+                </td>
+                <td class="action" data-title="Action">
+                  <div class="">
+                    <ul class="list-inline justify-content-center">
+                      <li class="list-inline-item">
+                        <a
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="View"
+                          class="view"
+                          href="{% url 'single_ads' item.ads_id.ads_id %}"
+                        >
+                          <i class="fa fa-eye"></i>
+                        </a>
+                      </li>
+                      {% comment %} <li class="list-inline-item">
+                        <a
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Delete"
+                        class="delete"
+                        href="{% url 'wishlist_operation' item.ads_id %}"
+                        >
+                        {{item.ads_id}}
+                        <i class="fa fa-trash"></i>
+                        <i class="bi bi-bookmark-dash-fill"></i>
+                      </a>
+                      </li> {% endcomment %}
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            {% endfor %}
+          {% else %}
+            <h4 class="text-center">No items in wishlist</h4>
+          </table>
+        {% endif %}
+      </div>
+    </div>
+    
+    {% endblock body %}
+  </div>
+  </div>
+</div>
+</div>
