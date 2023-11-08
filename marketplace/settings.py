@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = "*5n^__3x*4bpwo1!eujaj4@dxme2dkbacue_ok8ls%wnk^9i)4"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*','.vercel-app', '.now.sh']
 
@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'marketplace.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES['default'] = dj_database_url.config()
+DATABASES = {'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))}
 
 
 # Password validation
