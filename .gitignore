@@ -1,6 +1,7 @@
 # created by virtualenv automatically
 
 Marketplace_env/
+staticfiles_build/
 *.env
 *.json
 *.sqlite3
