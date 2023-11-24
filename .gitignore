@@ -4,3 +4,4 @@ Marketplace_env/
 *.env
 *.json
 *.sqlite3
+*.pyc
